@@ -11,6 +11,8 @@ _E002_CODE = "E002"
 _E002_MESSAGE = "Exactly two blank cells (0) are required."
 _E004_CODE = "E004"
 _E004_MESSAGE = "Each cell must be 0 or an integer from 1 to 16."
+_E005_CODE = "E005"
+_E005_MESSAGE = "Non-zero cell values must not duplicate."
 
 
 def _blank_count(grid: list[list[int]]) -> int:
@@ -19,6 +21,18 @@ def _blank_count(grid: list[list[int]]) -> int:
 
 def _value_in_range(cell: int) -> bool:
     return cell == 0 or 1 <= cell <= 16
+
+
+def _has_nonzero_duplicate(grid: list[list[int]]) -> bool:
+    seen: set[int] = set()
+    for row in grid:
+        for cell in row:
+            if cell == 0:
+                continue
+            if cell in seen:
+                return True
+            seen.add(cell)
+    return False
 
 
 def validate_grid(grid: Any) -> ValidationFailure:
@@ -45,6 +59,11 @@ def validate_grid(grid: Any) -> ValidationFailure:
         return ValidationFailure(
             code=_E004_CODE,
             message=_E004_MESSAGE,
+        )
+    if _has_nonzero_duplicate(grid):
+        return ValidationFailure(
+            code=_E005_CODE,
+            message=_E005_MESSAGE,
         )
     return ValidationFailure(
         code="NOT_IMPLEMENTED",

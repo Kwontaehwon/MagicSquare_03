@@ -20,6 +20,7 @@ from tests.conftest import (
 E002_CODE = "E002"
 E002_MESSAGE = "Exactly two blank cells (0) are required."
 E004_CODE = "E004"
+E005_CODE = "E005"
 
 
 class TestUIn04BlankCountZero:
@@ -88,9 +89,10 @@ class TestUIn08NonzeroDuplicate:
     def test_u_in_08_nonzero_duplicate_returns_e005(self) -> None:
         """U-IN-08 / AC-FR-01-04 — duplicate non-zero → code E005."""
         # Given
-        # matrix = 4×4 partial grid with duplicate non-zero values
+        matrix = DUPLICATE_NONZERO_GRID
 
         # When
-        # result = validate_grid(matrix)
+        result = validate_grid(matrix)
 
-        pytest.fail("RED: U-IN-08 — non-zero duplicate → validate_grid returns code E005")
+        # Then
+        assert result.code == E005_CODE
