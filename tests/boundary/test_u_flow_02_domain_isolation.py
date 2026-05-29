@@ -65,11 +65,33 @@ class TestUFlow02InvalidNeverCallsResolve:
         mocker: "MockerFixture",
     ) -> None:
         """U-FLOW-02 ext — E004 (value out of range) → resolve() not called."""
-        pytest.fail("RED: U-FLOW-02 ext — E004 path → resolve call_count == 0")
+        # Given
+        grid = NEGATIVE_VALUE_GRID
+        resolve_spy = mocker.patch(
+            "magic_square.boundary.cli.resolve",
+            autospec=True,
+        )
+
+        # When
+        solve(grid)
+
+        # Then
+        resolve_spy.assert_not_called()
 
     def test_u_flow_02_e005_duplicate_resolve_spy_zero_calls(
         self,
         mocker: "MockerFixture",
     ) -> None:
         """U-FLOW-02 ext — E005 (non-zero duplicate) → resolve() not called."""
-        pytest.fail("RED: U-FLOW-02 ext — E005 path → resolve call_count == 0")
+        # Given
+        grid = DUPLICATE_NONZERO_GRID
+        resolve_spy = mocker.patch(
+            "magic_square.boundary.cli.resolve",
+            autospec=True,
+        )
+
+        # When
+        solve(grid)
+
+        # Then
+        resolve_spy.assert_not_called()
