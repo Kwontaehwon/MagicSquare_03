@@ -8,11 +8,12 @@ from __future__ import annotations
 import pytest
 
 from magic_square.boundary.input_validator import validate_grid
-from tests.conftest import GRID_G0, THREE_BLANK_GRID
+from tests.conftest import GRID_G0, NEGATIVE_VALUE_GRID, THREE_BLANK_GRID
 
 # Report/11 — Failure envelope (GREEN: PRD v0.2 diff 0)
 E002_CODE = "E002"
 E002_MESSAGE = "Exactly two blank cells (0) are required."
+E004_CODE = "E004"
 
 
 class TestUIn04BlankCountZero:
@@ -51,12 +52,13 @@ class TestUIn06ValueRangeNegative:
     def test_u_in_06_negative_value_returns_e004(self) -> None:
         """U-IN-06 / AC-FR-01-03 — cell -1 → code E004."""
         # Given
-        # matrix = valid 4×4 partial grid with one cell set to -1
+        matrix = NEGATIVE_VALUE_GRID
 
         # When
-        # result = validate_grid(matrix)
+        result = validate_grid(matrix)
 
-        pytest.fail("RED: U-IN-06 — negative cell value → validate_grid returns code E004")
+        # Then
+        assert result.code == E004_CODE
 
 
 class TestUIn07ValueRangeAboveMax:
