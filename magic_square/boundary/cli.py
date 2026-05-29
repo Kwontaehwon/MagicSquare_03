@@ -9,10 +9,9 @@ from magic_square.boundary.models import ValidationFailure
 from magic_square.control.solver import resolve
 
 
-def solve(grid: Any) -> ValidationFailure:
+def solve(grid: Any) -> ValidationFailure | list[int]:
     """Validate input and delegate to Control resolve on success."""
     result = validate_grid(grid)
     if result.code != "NOT_IMPLEMENTED":
         return result
-    resolve(grid)
-    return result
+    return resolve(grid)
