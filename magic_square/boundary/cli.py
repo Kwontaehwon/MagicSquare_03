@@ -10,9 +10,9 @@ from magic_square.control.solver import resolve
 
 
 def solve(grid: Any) -> ValidationFailure:
-    """Validate input and delegate to Control resolve on success.
-
-    RED stub: incorrectly calls resolve before validation (isolation test must fail).
-    """
+    """Validate input and delegate to Control resolve on success."""
+    result = validate_grid(grid)
+    if result.code == "INVALID_SIZE":
+        return result
     resolve(grid)
-    return validate_grid(grid)
+    return result
