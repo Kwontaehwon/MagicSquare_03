@@ -8,7 +8,7 @@ from __future__ import annotations
 import pytest
 
 from magic_square.boundary.input_validator import validate_grid
-from tests.conftest import GRID_G0
+from tests.conftest import GRID_G0, THREE_BLANK_GRID
 
 # Report/11 — Failure envelope (GREEN: PRD v0.2 diff 0)
 E002_CODE = "E002"
@@ -36,12 +36,13 @@ class TestUIn05BlankCountThree:
     def test_u_in_05_three_blanks_returns_e002(self) -> None:
         """U-IN-05 / AC-FR-01-02 — three cells with 0 → code E002."""
         # Given
-        # matrix = 4×4 grid with exactly three 0 cells
+        matrix = THREE_BLANK_GRID
 
         # When
-        # result = validate_grid(matrix)
+        result = validate_grid(matrix)
 
-        pytest.fail("RED: U-IN-05 — three blank cells → validate_grid returns code E002")
+        # Then
+        assert result.code == E002_CODE
 
 
 class TestUIn06ValueRangeNegative:
