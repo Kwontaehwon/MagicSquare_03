@@ -1,0 +1,85 @@
+---
+description: Magic Square 금지 패턴 — 문제 정의 단계에서 도출된 안티패턴 목록
+alwaysApply: true
+---
+
+# 금지 패턴 (Forbidden Patterns)
+
+STEP 1~5 문제 정의 과정에서 드러난 구조적 결함을 코드로 재현하지 않는다.
+
+## 목적·수단 혼동 금지
+
+```python
+# ❌ BAD — "완성"이 목적인 듯 서술됨
+def make_magic_square():
+    ...
+
+# ✅ GOOD — 판단과 책임이 명확
+def generate() -> list[list[int]]: ...
+def validate(board) -> bool: ...
+```
+
+## Magic Constant 하드코딩 금지
+
+```python
+# ❌ BAD
+if row_sum == 34:
+    ...
+
+# ✅ GOOD — Level 2 Invariant: 크기로 유도
+MAGIC_CONSTANT = n * (n ** 2 + 1) // 2  # n=4 → 34
+if row_sum == MAGIC_CONSTANT:
+    ...
+```
+
+## 검증 조건 부분 생략 금지
+
+```python
+# ❌ BAD — 행만 검사, 열·대각선 누락
+def validate(board):
+    return all(sum(row) == 34 for row in board)
+
+# ✅ GOOD — 10개 조건 모두 독립 검사
+def validate(board):
+    return (
+        _rows_valid(board) and      # 행 4개
+        _cols_valid(board) and      # 열 4개
+        _diagonals_valid(board) and # 대각선 2개
+        _composition_valid(board)   # Level 0: 1~16 중복 없음
+    )
+```
+
+## 출력 함수에서 검증·생성 로직 금지
+
+```python
+# ❌ BAD — display가 검증을 포함
+def display(board):
+    if not validate(board):
+        raise ValueError("invalid")
+    print(board)
+
+# ✅ GOOD — display는 표현만
+def display(board) -> str:
+    return "\n".join(" ".join(str(n) for n in row) for row in board)
+```
+
+## 성공 기준 없는 루프 금지
+
+```python
+# ❌ BAD — 언제 끝나는지 정의 없음
+while True:
+    attempt = try_something()
+    if "looks right":
+        break
+
+# ✅ GOOD — 종료 조건이 validate()로 명시
+while True:
+    candidate = generate_candidate()
+    if validate(candidate):
+        return candidate
+```
+
+## 핵심 원칙 요약
+
+> "완성"은 10가지 조건(행 4 + 열 4 + 대각선 2)을 모두 통과했을 때만 선언된다.
+> 그 전까지는 완성이 아니다.

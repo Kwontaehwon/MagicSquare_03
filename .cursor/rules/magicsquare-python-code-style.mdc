@@ -1,0 +1,81 @@
+---
+description: Magic Square Python 코드 스타일 — 타입 힌트, 네이밍, 모듈 구조 규칙
+globs: **/*.py
+alwaysApply: false
+---
+
+# Python 코드 스타일
+
+## 타입 힌트 필수
+
+```python
+# ❌ BAD
+def validate(board):
+    ...
+
+# ✅ GOOD
+Board = list[list[int]]
+
+def validate(board: Board) -> bool:
+    ...
+
+def generate() -> Board:
+    ...
+
+def display(board: Board) -> str:
+    ...
+```
+
+## Magic Constant는 함수로 유도
+
+```python
+# ✅ GOOD
+def magic_constant(n: int) -> int:
+    return n * (n ** 2 + 1) // 2
+
+MAGIC_CONSTANT = magic_constant(4)  # 34
+```
+
+## 모듈 구조
+
+```
+magic_square/
+├── generator.py   # generate() — 해 생성 책임
+├── validator.py   # validate() 및 각 조건 검사 함수
+├── display.py     # display() — 표현 책임
+└── constants.py   # MAGIC_CONSTANT, GRID_SIZE 등
+```
+
+각 모듈은 다른 모듈의 구현 세부사항을 import하지 않는다.
+`validator.py`는 `generator.py`를 import하지 않는다.
+
+## 검증 함수 분리
+
+검증 조건 10개를 하나의 함수에 묶지 않는다. 독립적으로 작성한다.
+
+```python
+# ✅ GOOD — 각 조건이 독립 함수
+def _rows_valid(board: Board) -> bool: ...
+def _cols_valid(board: Board) -> bool: ...
+def _main_diagonal_valid(board: Board) -> bool: ...
+def _anti_diagonal_valid(board: Board) -> bool: ...
+def _composition_valid(board: Board) -> bool: ...
+
+def validate(board: Board) -> bool:
+    return all([
+        _composition_valid(board),
+        _rows_valid(board),
+        _cols_valid(board),
+        _main_diagonal_valid(board),
+        _anti_diagonal_valid(board),
+    ])
+```
+
+## 네이밍 규칙
+
+| 대상 | 규칙 | 예시 |
+|---|---|---|
+| 타입 별칭 | PascalCase | `Board`, `Row` |
+| 상수 | UPPER_SNAKE | `MAGIC_CONSTANT`, `GRID_SIZE` |
+| 내부 검증 함수 | 언더스코어 prefix | `_rows_valid` |
+| 공개 함수 | 동사_명사 | `generate`, `validate`, `display` |

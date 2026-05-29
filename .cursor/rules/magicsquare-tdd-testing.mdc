@@ -1,0 +1,84 @@
+---
+description: Magic Square TDD 테스트 규칙 — Invariant 계층별 테스트 목록과 작성 원칙
+globs: **/test_*.py
+alwaysApply: false
+---
+
+# TDD 테스트 규칙
+
+## Invariant 계층별 테스트 우선순위
+
+테스트는 반드시 Invariant 계층 순서대로 작성한다.
+상위 레벨 테스트가 실패하면 하위 레벨 테스트는 의미 없다.
+
+### Level 0 — 구성 조건 (전제, 먼저 작성)
+
+```python
+def test_board_has_exactly_16_cells(): ...
+def test_board_contains_all_numbers_1_to_16(): ...
+def test_board_has_no_duplicates(): ...
+```
+
+### Level 1 — 합산 조건 (마방진 정의, 각각 독립)
+
+```python
+def test_all_rows_sum_to_magic_constant(): ...
+def test_all_cols_sum_to_magic_constant(): ...
+def test_main_diagonal_sums_to_magic_constant(): ...
+def test_anti_diagonal_sums_to_magic_constant(): ...
+```
+
+### Level 2 — 파생 조건 (하드코딩 방지)
+
+```python
+def test_magic_constant_is_derived_not_hardcoded(): ...
+# magic_constant(4) == 34, magic_constant(3) == 15
+```
+
+### Level 3 — 설계 조건 (책임 분리 검증)
+
+```python
+def test_validate_accepts_any_board_regardless_of_generation_method(): ...
+def test_generate_output_passes_validate(): ...
+def test_display_is_independent_of_generation_and_validation(): ...
+```
+
+## 테스트 작성 원칙
+
+```python
+# ✅ GOOD — 하나의 테스트는 하나의 Invariant만 검증
+def test_main_diagonal_sums_to_magic_constant():
+    board = [[valid_4x4_board]]
+    assert sum(board[i][i] for i in range(4)) == MAGIC_CONSTANT
+
+# ❌ BAD — 여러 조건을 하나의 테스트에 묶음
+def test_board_is_valid():
+    board = generate()
+    assert validate(board)  # 어떤 조건이 실패했는지 알 수 없음
+```
+
+## 테스트 픽스처 규칙
+
+- 유효한 보드와 무효한 보드를 각각 픽스처로 분리한다.
+- 무효 보드는 어떤 조건이 위반되었는지 이름에 명시한다.
+
+```python
+VALID_BOARD = [
+    [16, 3, 2, 13],
+    [5, 10, 11, 8],
+    [9, 6, 7, 12],
+    [4, 15, 14, 1],
+]
+
+INVALID_ROW_SUM_BOARD = [...]      # 행 합이 34가 아닌 경우
+INVALID_DUPLICATE_BOARD = [...]    # 중복 숫자가 있는 경우
+INVALID_ANTI_DIAGONAL_BOARD = [...] # 반대각선 합이 34가 아닌 경우
+```
+
+## TDD가 이 문제에서 필연적인 이유
+
+> "무엇이 참이어야 하는가"를 먼저 선언하고,
+> 그것을 통과하는 코드를 나중에 만든다.
+>
+> 테스트 목록 = 불변 조건 목록.
+> 모든 테스트를 통과했을 때 = 10가지 조건을 모두 만족했을 때 = 성공.
