@@ -122,7 +122,8 @@ MagicSquare_/
 [진행] STEP 9    Dual-Track TDD — RED 커밋 묶음 → GREEN 1건씩 최소 구현
 
   AC-FR-01-01 (R1): G01~G09 GREEN 완료 (9 passed)
-  R2~R8: RED skeleton (feature/dual-track-tdd 기준)
+  R2~R4: GREEN 완료 (Track A 입력·격리·출력)
+  R5~R8: GREEN 완료 (Track B Entity/Control)
 ```
 
 ---
@@ -249,10 +250,10 @@ R8 (4)  → G27~G30
 |---|---|---|---|
 | **M0** | RED 설계 확정 | Dual-Track 33건 Test ID · AC 매핑 · G1/G2/G3 fixture 정의 | ✅ |
 | **M1** | RED 커밋 | R1~R8 테스트 파일 커밋, 전체 FAILED 확인 | 🔄 R1만 존재 |
-| **M2** | GREEN — FR-01 | G01~G18 통과 (입력 검증 + 격리) | 🔄 G01~G09 완료 |
-| **M3** | GREEN — FR-02~04 | G19~G26 통과 (Blank · Missing · Validator) | ⬜ |
-| **M4** | GREEN — FR-05 | G27~G30 통과 (Solver) | ⬜ |
-| **M5** | GREEN — 출력 계약 | G31~G33 통과 (U-OUT) | ⬜ |
+| **M2** | GREEN — FR-01 | G01~G18 통과 (입력 검증 + 격리) | ✅ |
+| **M3** | GREEN — FR-02~04 | G19~G26 통과 (Blank · Missing · Validator) | ✅ |
+| **M4** | GREEN — FR-05 | G27~G30 통과 (Solver) | ✅ |
+| **M5** | GREEN — 출력 계약 | G31~G33 통과 (U-OUT) | ✅ |
 | **M6** | REFACTOR | ECB 경계 정리 · Error code SSOT 통일 · coverage ≥ 80% | ⬜ |
 | **M7** | 통합 · 문서 | 전체 pytest GREEN · PRD diff 0 · README/Report 동기화 | ⬜ |
 
@@ -281,14 +282,14 @@ RED 커밋 (R#)  →  pytest FAILED 확인  →  GREEN 1건씩 (G##)  →  pytes
 ### A. RED 커밋 (테스트 먼저)
 
 - [x] **R1** — `test_ac_fr_01_01_input_size_validation.py` (9건, AC-FR-01-01)
-- [ ] **R2** — `test_u_in_04_08_input_validation.py` (5건, AC-FR-01-02~04)
-- [ ] **R3** — `test_u_flow_02_domain_isolation.py` (4건, U-FLOW-02)
-- [ ] **R4** — `test_u_out_01_03_output_contract.py` (3건, U-OUT-01~03)
-- [ ] **R5** — `test_d_loc_01_blank_finder.py` (1건, D-LOC-01)
-- [ ] **R6** — `test_d_mis_01_missing_numbers.py` (1건, D-MIS-01)
-- [ ] **R7** — `test_d_val_01_06_validator.py` (6건, D-VAL-01~06)
-- [ ] **R8** — `test_d_sol_01_04_solver.py` (4건, D-SOL-01~04)
-- [ ] `tests/conftest.py` — G0/G1/G2/G3 fixture 공유 (R2·R5~R8 선행)
+- [x] **R2** — `test_u_in_04_08_input_validation.py` (5건, AC-FR-01-02~04)
+- [x] **R3** — `test_u_flow_02_domain_isolation.py` (4건, U-FLOW-02)
+- [x] **R4** — `test_u_out_01_03_output_contract.py` (3건, U-OUT-01~03)
+- [x] **R5** — `test_d_loc_01_blank_finder.py` (1건, D-LOC-01)
+- [x] **R6** — `test_d_mis_01_missing_numbers.py` (1건, D-MIS-01)
+- [x] **R7** — `test_d_val_01_06_validator.py` (6건, D-VAL-01~06)
+- [x] **R8** — `test_d_sol_01_04_solver.py` (4건, D-SOL-01~04)
+- [x] `tests/conftest.py` — G0/G1/G2/G3 fixture 공유 (R2·R5~R8 선행)
 
 ### B. GREEN — Phase 1: FR-01 크기·격리 (R1, G01~G09)
 
@@ -298,39 +299,39 @@ RED 커밋 (R#)  →  pytest FAILED 확인  →  GREEN 1건씩 (G##)  →  pytes
 
 ### C. GREEN — Phase 2: FR-01 추가 입력 (R2, G10~G14)
 
-- [ ] **G10** — 빈칸 0개(G0) → E002
-- [ ] **G11** — 빈칸 3개 → E002
-- [ ] **G12** — 음수(-1) → E004
-- [ ] **G13** — 17 → E004
-- [ ] **G14** — non-zero 중복 → E005
+- [x] **G10** — 빈칸 0개(G0) → E002
+- [x] **G11** — 빈칸 3개 → E002
+- [x] **G12** — 음수(-1) → E004
+- [x] **G13** — 17 → E004
+- [x] **G14** — non-zero 중복 → E005
 
 ### D. GREEN — Phase 3: 격리 확장 (R3, G15~G18)
 
-- [ ] **G15** — null 입력 시 resolve 0회 (G09와 중복 검증)
-- [ ] **G16** — E002 경로 resolve 0회
-- [ ] **G17** — E004 경로 resolve 0회
-- [ ] **G18** — E005 경로 resolve 0회
+- [x] **G15** — null 입력 시 resolve 0회 (G09와 중복 검증)
+- [x] **G16** — E002 경로 resolve 0회
+- [x] **G17** — E004 경로 resolve 0회
+- [x] **G18** — E005 경로 resolve 0회
 
 ### E. GREEN — Phase 4: Domain Logic (R5~R8, G19~G30)
 
-- [ ] **G19** — `find_blank_coords(G1)` → `[(2,2),(3,3)]` (0-index)
-- [ ] **G20** — `find_not_exist_nums(G1)` → `[7, 10]`
-- [ ] **G21** — `is_magic_square(G0)` → `True`
-- [ ] **G22** — 행 합 불일치 → `False`
-- [ ] **G23** — 열 합 불일치 → `False`
-- [ ] **G24** — 대각선 불일치 → `False`
-- [ ] **G25** — non-zero 중복 → `False`
-- [ ] **G26** — 0 포함 완성 격자 → `False`
-- [ ] **G27** — `solution(G1)` → `[2,2,7,3,3,10]`
-- [ ] **G28** — G2 Step B fallback
-- [ ] **G29** — G3 `UnsolvableDomainError`
-- [ ] **G30** — 출력 shape (len 6, 1-index coords)
+- [x] **G19** — `find_blank_coords(G1)` → `[(1,2),(3,3)]` (0-index)
+- [x] **G20** — `find_not_exist_nums(G1)` → `[7, 10]`
+- [x] **G21** — `is_magic_square(G0)` → `True`
+- [x] **G22** — 행 합 불일치 → `False`
+- [x] **G23** — 열 합 불일치 → `False`
+- [x] **G24** — 대각선 불일치 → `False`
+- [x] **G25** — non-zero 중복 → `False`
+- [x] **G26** — 0 포함 완성 격자 → `False`
+- [x] **G27** — `solution(G1)` → `[2,2,7,3,3,10]`
+- [x] **G28** — G2 Step B fallback
+- [x] **G29** — G3 `UnsolvableDomainError`
+- [x] **G30** — 출력 shape (len 6, 1-index coords)
 
 ### F. GREEN — Phase 5: Boundary 출력 (R4, G31~G33)
 
-- [ ] **G31** — 성공 시 `len(result) == 6`
-- [ ] **G32** — r,c 1-index, 범위 [1,4]
-- [ ] **G33** — n1, n2 = missing numbers {7, 10}
+- [x] **G31** — 성공 시 `len(result) == 6`
+- [x] **G32** — r,c 1-index, 범위 [1,4]
+- [x] **G33** — n1, n2 = missing numbers {7, 10}
 
 ### G. REFACTOR (M6 — GREEN 전체 완료 후)
 
@@ -354,11 +355,10 @@ RED 커밋 (R#)  →  pytest FAILED 확인  →  GREEN 1건씩 (G##)  →  pytes
 
 | 우선순위 | 작업 | 명령 / 파일 |
 |---|---|---|
-| **1** | R2 RED 커밋 | `feature/dual-track-tdd`에서 `test_u_in_04_08_*` 복원·커밋 |
-| **2** | G10 GREEN | U-IN-04 blank count → E002 |
-| **3** | conftest fixture | G0/G1/G2/G3 공유 fixture 작성 (R2·Track B 선행) |
+| **1** | REFACTOR (M6) | Error code SSOT · coverage ≥ 80% |
+| **2** | 통합 확인 | `pytest tests/boundary/ tests/entity/test_d_*.py -v` |
 
-**현재 테스트 현황 (R1):** 9 passed · 0 failed (G01~G09 완료)
+**현재 테스트 현황:** 33 passed · 0 failed (Dual-Track GREEN 완료)
 
 ---
 
