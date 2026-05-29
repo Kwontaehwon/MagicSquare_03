@@ -8,11 +8,19 @@ from __future__ import annotations
 import pytest
 
 from magic_square.boundary.input_validator import validate_grid
+from tests.conftest import (
+    DUPLICATE_NONZERO_GRID,
+    GRID_G0,
+    NEGATIVE_VALUE_GRID,
+    THREE_BLANK_GRID,
+    VALUE_17_GRID,
+)
 
 # Report/11 — Failure envelope (GREEN: PRD v0.2 diff 0)
-# E002 = Exactly two blank cells (0) are required.
-# E004 = Each cell must be 0 or an integer from 1 to 16.
-# E005 = Non-zero cell values must not duplicate.
+E002_CODE = "E002"
+E002_MESSAGE = "Exactly two blank cells (0) are required."
+E004_CODE = "E004"
+E005_CODE = "E005"
 
 
 class TestUIn04BlankCountZero:
@@ -21,12 +29,13 @@ class TestUIn04BlankCountZero:
     def test_u_in_04_zero_blanks_returns_e002(self) -> None:
         """U-IN-04 / AC-FR-01-02 — zero blank cells → code E002."""
         # Given
-        # matrix = GRID_G0  # G0 — 0 blanks (tests/conftest.py)
+        matrix = GRID_G0
 
         # When
-        # result = validate_grid(matrix)
+        result = validate_grid(matrix)
 
-        pytest.fail("RED: U-IN-04 — G0 (0 blanks) → validate_grid returns code E002")
+        # Then
+        assert result.code == E002_CODE
 
 
 class TestUIn05BlankCountThree:
@@ -35,12 +44,13 @@ class TestUIn05BlankCountThree:
     def test_u_in_05_three_blanks_returns_e002(self) -> None:
         """U-IN-05 / AC-FR-01-02 — three cells with 0 → code E002."""
         # Given
-        # matrix = 4×4 grid with exactly three 0 cells
+        matrix = THREE_BLANK_GRID
 
         # When
-        # result = validate_grid(matrix)
+        result = validate_grid(matrix)
 
-        pytest.fail("RED: U-IN-05 — three blank cells → validate_grid returns code E002")
+        # Then
+        assert result.code == E002_CODE
 
 
 class TestUIn06ValueRangeNegative:
@@ -49,12 +59,13 @@ class TestUIn06ValueRangeNegative:
     def test_u_in_06_negative_value_returns_e004(self) -> None:
         """U-IN-06 / AC-FR-01-03 — cell -1 → code E004."""
         # Given
-        # matrix = valid 4×4 partial grid with one cell set to -1
+        matrix = NEGATIVE_VALUE_GRID
 
         # When
-        # result = validate_grid(matrix)
+        result = validate_grid(matrix)
 
-        pytest.fail("RED: U-IN-06 — negative cell value → validate_grid returns code E004")
+        # Then
+        assert result.code == E004_CODE
 
 
 class TestUIn07ValueRangeAboveMax:
@@ -63,12 +74,13 @@ class TestUIn07ValueRangeAboveMax:
     def test_u_in_07_value_17_returns_e004(self) -> None:
         """U-IN-07 / AC-FR-01-03 — cell 17 → code E004."""
         # Given
-        # matrix = valid 4×4 partial grid with one cell set to 17
+        matrix = VALUE_17_GRID
 
         # When
-        # result = validate_grid(matrix)
+        result = validate_grid(matrix)
 
-        pytest.fail("RED: U-IN-07 — cell value 17 → validate_grid returns code E004")
+        # Then
+        assert result.code == E004_CODE
 
 
 class TestUIn08NonzeroDuplicate:
@@ -77,9 +89,10 @@ class TestUIn08NonzeroDuplicate:
     def test_u_in_08_nonzero_duplicate_returns_e005(self) -> None:
         """U-IN-08 / AC-FR-01-04 — duplicate non-zero → code E005."""
         # Given
-        # matrix = 4×4 partial grid with duplicate non-zero values
+        matrix = DUPLICATE_NONZERO_GRID
 
         # When
-        # result = validate_grid(matrix)
+        result = validate_grid(matrix)
 
-        pytest.fail("RED: U-IN-08 — non-zero duplicate → validate_grid returns code E005")
+        # Then
+        assert result.code == E005_CODE

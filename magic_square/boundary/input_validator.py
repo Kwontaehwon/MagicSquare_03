@@ -6,12 +6,65 @@ from typing import Any
 
 from magic_square.boundary.models import ValidationFailure
 
+_GRID_SIZE = 4
+_E002_CODE = "E002"
+_E002_MESSAGE = "Exactly two blank cells (0) are required."
+_E004_CODE = "E004"
+_E004_MESSAGE = "Each cell must be 0 or an integer from 1 to 16."
+_E005_CODE = "E005"
+_E005_MESSAGE = "Non-zero cell values must not duplicate."
+
+
+def _blank_count(grid: list[list[int]]) -> int:
+    return sum(1 for row in grid for cell in row if cell == 0)
+
+
+def _value_in_range(cell: int) -> bool:
+    return cell == 0 or 1 <= cell <= 16
+
+
+def _has_nonzero_duplicate(grid: list[list[int]]) -> bool:
+    seen: set[int] = set()
+    for row in grid:
+        for cell in row:
+            if cell == 0:
+                continue
+            if cell in seen:
+                return True
+            seen.add(cell)
+    return False
+
 
 def validate_grid(grid: Any) -> ValidationFailure:
     """Validate grid structure per Input Contract §6.1.1.
 
     RED stub: always returns placeholder failure until GREEN implementation.
     """
+    if grid is None:
+        return ValidationFailure(
+            code="INVALID_SIZE",
+            message="Grid must be 4x4.",
+        )
+    if len(grid) != _GRID_SIZE or any(len(row) != _GRID_SIZE for row in grid):
+        return ValidationFailure(
+            code="INVALID_SIZE",
+            message="Grid must be 4x4.",
+        )
+    if _blank_count(grid) != 2:
+        return ValidationFailure(
+            code=_E002_CODE,
+            message=_E002_MESSAGE,
+        )
+    if any(not _value_in_range(cell) for row in grid for cell in row):
+        return ValidationFailure(
+            code=_E004_CODE,
+            message=_E004_MESSAGE,
+        )
+    if _has_nonzero_duplicate(grid):
+        return ValidationFailure(
+            code=_E005_CODE,
+            message=_E005_MESSAGE,
+        )
     return ValidationFailure(
         code="NOT_IMPLEMENTED",
         message="validate_grid is not implemented",

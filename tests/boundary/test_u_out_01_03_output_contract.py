@@ -1,15 +1,9 @@
-"""Track A — U-OUT-01~03: success output contract (RED skeleton).
-
-U-OUT: Control mock/spy allowed (resolve / execute stub) — comments only in RED.
-"""
+"""Track A — U-OUT-01~03: success output contract."""
 
 from __future__ import annotations
 
-import pytest
-
 from magic_square.boundary.cli import solve
-
-# Expected G1 success vector (Report/11 §2): [2, 2, 7, 3, 3, 10] (1-index)
+from tests.conftest import GRID_G1
 
 
 class TestUOut01ResultLength:
@@ -18,30 +12,28 @@ class TestUOut01ResultLength:
     def test_u_out_01_success_result_length_is_six(self) -> None:
         """U-OUT-01 / AC-FR-05-03 — len(result) == 6 for valid G1 input."""
         # Given
-        # matrix = GRID_G1
-        # mocker.patch("magic_square.control.solver.resolve", return_value=[2, 2, 7, 3, 3, 10])
+        matrix = GRID_G1
 
         # When
-        # result = solve(matrix)
+        result = solve(matrix)
 
-        pytest.fail("RED: U-OUT-01 — G1 success path → solve returns length-6 int list")
+        # Then
+        assert len(result) == 6
 
 
 class TestUOut02CoordinatesOneIndexed:
-    """U-OUT-02 — r,c are 1-index in [1,4]; fill values match missing numbers."""
+    """U-OUT-02 — r,c are 1-index in [1,4]."""
 
     def test_u_out_02_success_coordinates_are_1_index_in_range(self) -> None:
-        """U-OUT-02 / I11 — 1-index coords in [1,4] for G1 stub [2,2,7,3,3,10]."""
+        """U-OUT-02 / I11 — 1-index coords in [1,4] for G1."""
         # Given
-        # matrix = GRID_G1
-        # mocker.patch("magic_square.control.solver.resolve", return_value=[2, 2, 7, 3, 3, 10])
+        matrix = GRID_G1
 
         # When
-        # result = solve(matrix)
+        result = solve(matrix)
 
-        pytest.fail(
-            "RED: U-OUT-02 — G1 output r,c ∈ [1,4] (1-index); n1=7, n2=10"
-        )
+        # Then
+        assert all(1 <= result[i] <= 4 for i in (0, 1, 3, 4))
 
 
 class TestUOut03FillValuesMatchMissing:
@@ -50,12 +42,11 @@ class TestUOut03FillValuesMatchMissing:
     def test_u_out_03_success_fill_values_match_missing_numbers(self) -> None:
         """U-OUT-03 / I7+I11 — n1,n2 are missing values {7,10} for G1."""
         # Given
-        # matrix = GRID_G1
-        # mocker.patch("magic_square.control.solver.resolve", return_value=[2, 2, 7, 3, 3, 10])
+        matrix = GRID_G1
 
         # When
-        # result = solve(matrix)
+        result = solve(matrix)
 
-        pytest.fail(
-            "RED: U-OUT-03 — G1 success → result[2]==7 and result[5]==10 (missing nums)"
-        )
+        # Then
+        assert result[2] == 7
+        assert result[5] == 10

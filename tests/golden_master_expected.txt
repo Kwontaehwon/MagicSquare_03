@@ -1,0 +1,47 @@
+[normal_success]
+Input:
+16 2 3 13
+5 11 0 8
+9 1 6 12
+4 14 15 0
+Output:
+[2,2,7,3,3,10]
+________________________________________
+[reverse_success]
+Input:
+16 2 3 13
+5 11 10 8
+9 7 0 12
+4 14 15 0
+Output:
+[3,3,6,4,4,1]
+________________________________________
+[invalid_blank_count]
+Input:
+0 1 2 3
+4 0 6 7
+8 9 0 11
+12 13 14 15
+Error:
+E002
+Exactly two blank cells (0) are required.
+________________________________________
+[duplicate_number]
+Input:
+1 1 0 4
+5 6 7 8
+9 10 11 12
+13 14 15 0
+Error:
+E005
+Non-zero cell values must not duplicate.
+________________________________________
+[no_valid_solution]
+Input:
+0 2 3 13
+5 11 10 8
+9 7 12 4
+14 15 6 0
+Error:
+UNSOLVABLE
+no placement order yields a magic square
