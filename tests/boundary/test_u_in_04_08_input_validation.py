@@ -8,7 +8,13 @@ from __future__ import annotations
 import pytest
 
 from magic_square.boundary.input_validator import validate_grid
-from tests.conftest import GRID_G0, NEGATIVE_VALUE_GRID, THREE_BLANK_GRID
+from tests.conftest import (
+    DUPLICATE_NONZERO_GRID,
+    GRID_G0,
+    NEGATIVE_VALUE_GRID,
+    THREE_BLANK_GRID,
+    VALUE_17_GRID,
+)
 
 # Report/11 — Failure envelope (GREEN: PRD v0.2 diff 0)
 E002_CODE = "E002"
@@ -67,12 +73,13 @@ class TestUIn07ValueRangeAboveMax:
     def test_u_in_07_value_17_returns_e004(self) -> None:
         """U-IN-07 / AC-FR-01-03 — cell 17 → code E004."""
         # Given
-        # matrix = valid 4×4 partial grid with one cell set to 17
+        matrix = VALUE_17_GRID
 
         # When
-        # result = validate_grid(matrix)
+        result = validate_grid(matrix)
 
-        pytest.fail("RED: U-IN-07 — cell value 17 → validate_grid returns code E004")
+        # Then
+        assert result.code == E004_CODE
 
 
 class TestUIn08NonzeroDuplicate:
