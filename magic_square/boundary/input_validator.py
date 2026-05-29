@@ -7,6 +7,12 @@ from typing import Any
 from magic_square.boundary.models import ValidationFailure
 
 _GRID_SIZE = 4
+_E002_CODE = "E002"
+_E002_MESSAGE = "Exactly two blank cells (0) are required."
+
+
+def _blank_count(grid: list[list[int]]) -> int:
+    return sum(1 for row in grid for cell in row if cell == 0)
 
 
 def validate_grid(grid: Any) -> ValidationFailure:
@@ -23,6 +29,11 @@ def validate_grid(grid: Any) -> ValidationFailure:
         return ValidationFailure(
             code="INVALID_SIZE",
             message="Grid must be 4x4.",
+        )
+    if _blank_count(grid) != 2:
+        return ValidationFailure(
+            code=_E002_CODE,
+            message=_E002_MESSAGE,
         )
     return ValidationFailure(
         code="NOT_IMPLEMENTED",

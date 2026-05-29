@@ -8,11 +8,11 @@ from __future__ import annotations
 import pytest
 
 from magic_square.boundary.input_validator import validate_grid
+from tests.conftest import GRID_G0
 
 # Report/11 — Failure envelope (GREEN: PRD v0.2 diff 0)
-# E002 = Exactly two blank cells (0) are required.
-# E004 = Each cell must be 0 or an integer from 1 to 16.
-# E005 = Non-zero cell values must not duplicate.
+E002_CODE = "E002"
+E002_MESSAGE = "Exactly two blank cells (0) are required."
 
 
 class TestUIn04BlankCountZero:
@@ -21,12 +21,13 @@ class TestUIn04BlankCountZero:
     def test_u_in_04_zero_blanks_returns_e002(self) -> None:
         """U-IN-04 / AC-FR-01-02 — zero blank cells → code E002."""
         # Given
-        # matrix = GRID_G0  # G0 — 0 blanks (tests/conftest.py)
+        matrix = GRID_G0
 
         # When
-        # result = validate_grid(matrix)
+        result = validate_grid(matrix)
 
-        pytest.fail("RED: U-IN-04 — G0 (0 blanks) → validate_grid returns code E002")
+        # Then
+        assert result.code == E002_CODE
 
 
 class TestUIn05BlankCountThree:
