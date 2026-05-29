@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "magic-square"
+version = "0.1.0"
+description = "4x4 Magic Square — Dual-Track TDD + ECB Architecture"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+gui = ["PyQt6>=6.4"]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "pytest-mock>=3.12",
+    "pydantic>=2.0",
+    "black>=24.0",
+    "mypy>=1.8",
+]
+
+[project.scripts]
+magic-square-gui = "magic_square.boundary.gui:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
