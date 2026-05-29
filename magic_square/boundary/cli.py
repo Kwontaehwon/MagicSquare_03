@@ -12,7 +12,7 @@ from magic_square.control.solver import resolve
 def solve(grid: Any) -> ValidationFailure:
     """Validate input and delegate to Control resolve on success."""
     result = validate_grid(grid)
-    if result.code == "INVALID_SIZE":
+    if result.code != "NOT_IMPLEMENTED":
         return result
     resolve(grid)
     return result
