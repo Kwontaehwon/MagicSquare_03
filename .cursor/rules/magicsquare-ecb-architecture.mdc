@@ -54,6 +54,10 @@ def make_and_print_magic_square():
     ...
 ```
 
+## Partial Solver 예외 (M6 ADR)
+
+v1 Primary Feature(2칸 빈칸 Solver)에서는 `control.solver`가 후보 완성 격자에 대해 `is_magic_square`를 호출해 시도를 종료한다. 이는 classic `generate()`와 달리 **부분 격자 → 완성 후 판별** 유즈케이스이며, Level 3의 “생성이 검증을 모른다” 원칙은 **완성형 generate**에 적용한다.
+
 ## Level 3 설계 불변 조건
 
 - `generate()`는 `validate()`를 import하거나 직접 호출하지 않는다.

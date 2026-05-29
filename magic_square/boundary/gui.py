@@ -12,15 +12,15 @@ from magic_square.boundary.display import (
     magic_constant_label,
 )
 from magic_square.boundary.models import ValidationFailure
-from magic_square.entity.constants import GRID_SIZE, MAGIC_CONSTANT
+from magic_square.entity.constants import GRID_SIZE, MAGIC_CONSTANT, MAX_CELL_VALUE
 
 Board = list[list[int]]
 
 _BLANK = 0
 _MIN_VALUE = 0
-_MAX_VALUE = 16
 _CELL_SIZE = 56
 
+# Same values as tests.conftest.GRID_G1 (GM-TC-01); kept in boundary to avoid tests import.
 _EXAMPLE_G1: Board = [
     [16, 2, 3, 13],
     [5, 11, 0, 8],
@@ -87,25 +87,44 @@ class MagicSquareWindow:
             QVBoxLayout,
             QWidget,
         ) = _require_pyqt6()
+        self._QFont = QFont
+        self._QGridLayout = QGridLayout
+        self._QGroupBox = QGroupBox
+        self._QHBoxLayout = QHBoxLayout
+        self._QLabel = QLabel
+        self._QPushButton = QPushButton
+        self._QSpinBox = QSpinBox
+        self._QVBoxLayout = QVBoxLayout
+        self._QWidget = QWidget
 
         self._window = QMainWindow()
         self._window.setWindowTitle("4×4 Magic Square")
         self._window.setMinimumSize(520, 620)
 
-        central = QWidget()
+        central = self._QWidget()
         self._window.setCentralWidget(central)
-        root = QVBoxLayout(central)
+        root = self._QVBoxLayout(central)
         root.setSpacing(14)
 
-        title = QLabel("4×4 Magic Square Solver")
-        title_font = QFont()
+        self._build_header(root)
+        self._build_grid(root)
+        self._build_sums(root)
+        self._build_buttons(root)
+        self._build_result_panel(root)
+
+        root.addStretch()
+        self._update_sums()
+
+    def _build_header(self, root) -> None:
+        title = self._QLabel("4×4 Magic Square Solver")
+        title_font = self._QFont()
         title_font.setPointSize(16)
         title_font.setBold(True)
         title.setFont(title_font)
         title.setAlignment(self._Qt.AlignmentFlag.AlignCenter)
         root.addWidget(title)
 
-        subtitle = QLabel(
+        subtitle = self._QLabel(
             f"빈칸(0) 2개를 채워 모든 행·열·대각선의 합이 "
             f"{magic_constant_label()}이 되도록 합니다."
         )
@@ -113,34 +132,35 @@ class MagicSquareWindow:
         subtitle.setAlignment(self._Qt.AlignmentFlag.AlignCenter)
         root.addWidget(subtitle)
 
-        grid_group = QGroupBox("격자 입력 (0 = 빈칸)")
-        grid_layout = QGridLayout(grid_group)
+    def _build_grid(self, root) -> None:
+        grid_group = self._QGroupBox("격자 입력 (0 = 빈칸)")
+        grid_layout = self._QGridLayout(grid_group)
         grid_layout.setSpacing(6)
 
-        header_font = QFont()
+        header_font = self._QFont()
         header_font.setBold(True)
 
         for col in range(GRID_SIZE):
-            label = QLabel(str(col + 1))
+            label = self._QLabel(str(col + 1))
             label.setAlignment(self._Qt.AlignmentFlag.AlignCenter)
             label.setFont(header_font)
             grid_layout.addWidget(label, 0, col + 1)
 
-        self._cells: list[list[QSpinBox]] = []
+        self._cells: list[list] = []
         for row in range(GRID_SIZE):
-            row_label = QLabel(str(row + 1))
+            row_label = self._QLabel(str(row + 1))
             row_label.setAlignment(self._Qt.AlignmentFlag.AlignCenter)
             row_label.setFont(header_font)
             grid_layout.addWidget(row_label, row + 1, 0)
 
-            row_cells: list[QSpinBox] = []
+            row_cells: list = []
             for col in range(GRID_SIZE):
-                spin = QSpinBox()
-                spin.setRange(_MIN_VALUE, _MAX_VALUE)
+                spin = self._QSpinBox()
+                spin.setRange(_MIN_VALUE, MAX_CELL_VALUE)
                 spin.setSpecialValueText("·")
                 spin.setAlignment(self._Qt.AlignmentFlag.AlignCenter)
                 spin.setFixedSize(_CELL_SIZE, _CELL_SIZE)
-                spin.setFont(QFont("Consolas", 12))
+                spin.setFont(self._QFont("Consolas", 12))
                 spin.valueChanged.connect(self._on_grid_changed)
                 grid_layout.addWidget(spin, row + 1, col + 1)
                 row_cells.append(spin)
@@ -148,35 +168,35 @@ class MagicSquareWindow:
 
         root.addWidget(grid_group)
 
-        sums_layout = QHBoxLayout()
-        self._row_sums_label = QLabel()
-        self._col_sums_label = QLabel()
+    def _build_sums(self, root) -> None:
+        sums_layout = self._QHBoxLayout()
+        self._row_sums_label = self._QLabel()
+        self._col_sums_label = self._QLabel()
         sums_layout.addWidget(self._row_sums_label)
         sums_layout.addWidget(self._col_sums_label)
         root.addLayout(sums_layout)
 
-        button_layout = QHBoxLayout()
-        solve_btn = QPushButton("풀이")
+    def _build_buttons(self, root) -> None:
+        button_layout = self._QHBoxLayout()
+        solve_btn = self._QPushButton("풀이")
         solve_btn.setDefault(True)
         solve_btn.clicked.connect(self._on_solve)
         button_layout.addWidget(solve_btn)
 
-        example_btn = QPushButton("예제 (G1)")
+        example_btn = self._QPushButton("예제 (G1)")
         example_btn.clicked.connect(self._load_example)
         button_layout.addWidget(example_btn)
 
-        clear_btn = QPushButton("초기화")
+        clear_btn = self._QPushButton("초기화")
         clear_btn.clicked.connect(self._clear_grid)
         button_layout.addWidget(clear_btn)
         root.addLayout(button_layout)
 
-        self._result_label = QLabel("격자를 입력한 뒤 「풀이」를 누르세요.")
+    def _build_result_panel(self, root) -> None:
+        self._result_label = self._QLabel("격자를 입력한 뒤 「풀이」를 누르세요.")
         self._result_label.setWordWrap(True)
         self._result_label.setStyleSheet(_STYLE_INFO)
         root.addWidget(self._result_label)
-
-        root.addStretch()
-        self._update_sums()
 
     def show(self) -> None:
         self._window.show()

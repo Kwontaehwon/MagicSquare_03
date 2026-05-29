@@ -48,6 +48,10 @@ markers = [
 [tool.coverage.run]
 source = ["magic_square"]
 branch = true
+omit = [
+    "*/boundary/gui.py",
+    "*/boundary/__main__.py",
+]
 
 [tool.coverage.report]
 fail_under = 80

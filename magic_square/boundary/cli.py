@@ -1,4 +1,4 @@
-"""Boundary orchestrator — RED stub (not implemented)."""
+"""Boundary orchestrator — validate input and delegate to Control."""
 
 from __future__ import annotations
 
@@ -11,9 +11,9 @@ from magic_square.control.solver import UnsolvableDomainError, resolve
 
 def solve(grid: Any) -> ValidationFailure | list[int]:
     """Validate input and delegate to Control resolve on success."""
-    result = validate_grid(grid)
-    if result.code != "NOT_IMPLEMENTED":
-        return result
+    failure = validate_grid(grid)
+    if failure is not None:
+        return failure
     try:
         return resolve(grid)
     except UnsolvableDomainError as exc:

@@ -120,6 +120,39 @@ class TestDVal05DuplicateNonzero:
         assert result is False
 
 
+class TestDVal07MalformedShape:
+    """Malformed grid shape → False without IndexError."""
+
+    def test_d_val_07_three_by_four_false(self) -> None:
+        """3×4 grid → False."""
+        matrix = [
+            [1, 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 10, 11, 12],
+        ]
+        assert is_magic_square(matrix) is False
+
+    def test_d_val_07_four_by_three_false(self) -> None:
+        """4×3 grid → False."""
+        matrix = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9],
+            [10, 11, 12],
+        ]
+        assert is_magic_square(matrix) is False
+
+    def test_d_val_07_jagged_rows_false(self) -> None:
+        """Jagged row lengths → False."""
+        matrix = [
+            [1, 2, 3, 4],
+            [5, 6, 7],
+            [8, 9, 10, 11],
+            [12, 13, 14, 15],
+        ]
+        assert is_magic_square(matrix) is False
+
+
 class TestDVal06ContainsZero:
     """D-VAL-06 — complete grid must not contain 0 → False."""
 

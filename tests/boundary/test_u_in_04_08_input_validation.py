@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import pytest
 
+from magic_square.boundary.error_messages import E002_CODE, E004_CODE, E005_CODE
 from magic_square.boundary.input_validator import validate_grid
 from tests.conftest import (
     DUPLICATE_NONZERO_GRID,
@@ -15,12 +16,6 @@ from tests.conftest import (
     THREE_BLANK_GRID,
     VALUE_17_GRID,
 )
-
-# Report/11 — Failure envelope (GREEN: PRD v0.2 diff 0)
-E002_CODE = "E002"
-E002_MESSAGE = "Exactly two blank cells (0) are required."
-E004_CODE = "E004"
-E005_CODE = "E005"
 
 
 class TestUIn04BlankCountZero:

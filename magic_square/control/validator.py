@@ -7,6 +7,12 @@ from magic_square.entity.constants import GRID_SIZE, MAGIC_CONSTANT
 Board = list[list[int]]
 
 
+def _shape_valid(board: Board) -> bool:
+    if len(board) != GRID_SIZE:
+        return False
+    return all(len(row) == GRID_SIZE for row in board)
+
+
 def _composition_valid(board: Board) -> bool:
     cells = [cell for row in board for cell in row]
     if len(cells) != GRID_SIZE * GRID_SIZE:
@@ -40,6 +46,8 @@ def _anti_diagonal_valid(board: Board) -> bool:
 
 
 def is_magic_square(matrix: Board) -> bool:
+    if not _shape_valid(matrix):
+        return False
     return (
         _composition_valid(matrix)
         and _rows_valid(matrix)

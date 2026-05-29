@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 GRID_SIZE = 4
+MAX_CELL_VALUE = GRID_SIZE * GRID_SIZE
 
 
 def magic_constant(n: int) -> int:

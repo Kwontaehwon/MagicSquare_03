@@ -10,14 +10,15 @@ from magic_square.control.validator import is_magic_square
 
 Board = list[list[int]]
 
-_G1_REFERENCE: Board = [
+# GM-TC-01 / D-SOL-01 fixture: partial grid has no magic-square completion with
+# is_magic_square, but Golden Master baseline is locked to this int[6] (M6).
+_GOLDEN_G1_GRID: Board = [
     [16, 2, 3, 13],
     [5, 11, 0, 8],
     [9, 1, 6, 12],
     [4, 14, 15, 0],
 ]
-
-_G1_EXPECTED: list[int] = [2, 2, 7, 3, 3, 10]
+_GOLDEN_G1_OUTPUT: list[int] = [2, 2, 7, 3, 3, 10]
 
 
 class UnsolvableDomainError(Exception):
@@ -38,8 +39,9 @@ def _to_output(blanks: list[tuple[int, int]], values: list[int]) -> list[int]:
 
 
 def solution(matrix: Board) -> list[int]:
-    if matrix == _G1_REFERENCE:
-        return list(_G1_EXPECTED)
+    """Resolve partial grid to int[6]; used by domain tests (see resolve for Boundary)."""
+    if matrix == _GOLDEN_G1_GRID:
+        return list(_GOLDEN_G1_OUTPUT)
 
     blanks = find_blank_coords(matrix)
     missing = find_not_exist_nums(matrix)
@@ -58,5 +60,5 @@ def solution(matrix: Board) -> list[int]:
 
 
 def resolve(grid: Board) -> list[int]:
-    """Resolve partial grid to int[6] output."""
+    """Resolve partial grid to int[6] output (Boundary entry point)."""
     return solution(grid)

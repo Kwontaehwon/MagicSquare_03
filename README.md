@@ -335,12 +335,13 @@ RED 커밋 (R#)  →  pytest FAILED 확인  →  GREEN 1건씩 (G##)  →  pytes
 
 ### G. REFACTOR (M6 — GREEN 전체 완료 후)
 
-- [ ] Error code SSOT 통일 (`INVALID_SIZE` vs `E001`/`E003` → PRD v0.2 기준)
-- [ ] `input_validator.py` — 크기·blank·범위·중복 검사 함수 분리
-- [ ] `cli.py` — validate → resolve 단방향 흐름 정리
-- [ ] Entity `constants.py` — `GRID_SIZE`, `MAGIC_CONSTANT` 하드코딩 제거
-- [ ] pytest coverage ≥ 80% 확인
-- [ ] RED stub (`NOT_IMPLEMENTED`, `pytest.fail`) 잔여 제거
+- [ ] Error code SSOT 통일 (`INVALID_SIZE` vs `E001`/`E003` → PRD v0.2 기준) — **보류 (M7)**
+- [x] `input_validator.py` — 크기·blank·범위·중복 검사 함수 분리
+- [x] `cli.py` — validate → resolve 단방향 흐름 정리 (`ValidationFailure | None`)
+- [x] Entity `constants.py` — `MAX_CELL_VALUE` SSOT; boundary `error_messages.py`
+- [x] pytest coverage ≥ 80% 확인 (PyQt6 `gui.py`·`__main__.py`는 coverage omit)
+- [x] RED stub (`NOT_IMPLEMENTED`) 제거
+- [x] Golden Master baseline (`tests/golden_master_expected.txt`) **불변** — REFACTOR 중 미수정
 
 ### H. 통합 · 문서 (M7)
 
@@ -358,7 +359,7 @@ RED 커밋 (R#)  →  pytest FAILED 확인  →  GREEN 1건씩 (G##)  →  pytes
 | **1** | REFACTOR (M6) | Error code SSOT · coverage ≥ 80% |
 | **2** | 통합 확인 | `pytest tests/boundary/ tests/entity/test_d_*.py -v` |
 
-**현재 테스트 현황:** 33 passed · 0 failed (Dual-Track GREEN 완료)
+**현재 테스트 현황:** 62 passed · 0 failed (GREEN + M6 REFACTOR)
 
 ---
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
+from magic_square.boundary.error_messages import E002_MESSAGE, E005_MESSAGE
 from tests.conftest import (
     DUPLICATE_NONZERO_GRID,
     GRID_G1,
@@ -25,8 +26,6 @@ UNSOLVABLE_GRID: Grid = [
 
 SECTION_SEPARATOR = "________________________________________"
 
-E002_MESSAGE = "Exactly two blank cells (0) are required."
-E005_MESSAGE = "Non-zero cell values must not duplicate."
 UNSOLVABLE_MESSAGE = "no placement order yields a magic square"
 
 
