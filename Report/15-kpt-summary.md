@@ -22,11 +22,9 @@
 
 ## Try
 
-- Claude Code로 동일 TDD 사이클 재현 — Cursor vs Claude 차이 측정
-- Codex로 레거시 BIOS 코드 테스트 초안 생성 → 엔지니어가 하드웨어 동작과 대조·검증
-- BIOS 부팅 시퀀스의 핵심 불변 조건(POST 코드, 메모리 트레이닝 등)을 Level 0~2로 문서화
-- BIOS 프로젝트용 AI Rules 파일 3개 작성 (금지 패턴, 계층 분리, 테스트 규칙)
-- 현업 기능 1개에 Two-PR 전략 적용 — "test PR 먼저 merged → impl PR"
+- GREEN 단계 "최소 구현" 기준을 사전에 명시 — 특정 입력 하드코딩은 구현으로 인정하지 않는다
+- 반대각선 단독 실패처럼 Level 1 "각각 독립" 원칙을 테스트 케이스에도 동일하게 적용한다
+- Error code 등 계약 상수는 PRD 확정 즉시 단일 출처(SSOT)로 코드에 반영하고 혼재를 허용하지 않는다
 
 ## 현업 적용 계획 (BIOS 엔지니어 → Claude Code / Codex 전환)
 
