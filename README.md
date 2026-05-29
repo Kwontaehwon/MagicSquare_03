@@ -121,7 +121,7 @@ MagicSquare_/
 [완료] STEP 6~8  Test List · Python/pytest · ECB 설계
 [진행] STEP 9    Dual-Track TDD — RED 커밋 묶음 → GREEN 1건씩 최소 구현
 
-  AC-FR-01-01 (R1): G01~G05 GREEN 완료 · G06~G09 RED 잔여
+  AC-FR-01-01 (R1): G01~G09 GREEN 완료 (9 passed)
   R2~R8: RED skeleton (feature/dual-track-tdd 기준)
 ```
 
@@ -161,10 +161,10 @@ RED 커밋 권장 순서: **R1 → R2 → R3 → (R5, R6, R7, R8) → R4**
 | G03 | U-IN-01 | `test_none_grid_message_matches_prd_section_8_1_character_for_character` | (G01과 동일) | GREEN |
 | G04 | U-IN-01 | `test_none_grid_failure_code_is_invalid_size_not_out_of_scope_codes` | (G01과 동일) | GREEN |
 | G05 | — | `test_red_scope_permits_only_invalid_size_failure_code` | 구현 불필요 (메타) | 항상 통과 |
-| G06 | U-IN-02d | `test_size_mismatch_grid_returns_invalid_size[empty_list]` | 4×4 크기 검사 | RED |
-| G07 | U-IN-02a | `test_size_mismatch_grid_returns_invalid_size[four_rows_zero_cols]` | (G06과 동일) | RED |
-| G08 | U-IN-02b | `test_size_mismatch_grid_returns_invalid_size[three_by_four]` | (G06과 동일) | RED |
-| G09 | U-FLOW-02 | `test_none_grid_resolve_spy_called_zero_times` | `cli.solve`: validate 선행, 실패 시 `resolve` 미호출 | RED |
+| G06 | U-IN-02d | `test_size_mismatch_grid_returns_invalid_size[empty_list]` | 4×4 크기 검사 | GREEN |
+| G07 | U-IN-02a | `test_size_mismatch_grid_returns_invalid_size[four_rows_zero_cols]` | (G06과 동일) | GREEN |
+| G08 | U-IN-02b | `test_size_mismatch_grid_returns_invalid_size[three_by_four]` | (G06과 동일) | GREEN |
+| G09 | U-FLOW-02 | `test_none_grid_resolve_spy_called_zero_times` | `cli.solve`: validate 선행, 실패 시 `resolve` 미호출 | GREEN |
 
 > **실무 팁:** G01~G05는 1커밋, G06~G08은 1커밋, G09는 1커밋으로 묶어도 TDD 원칙에 맞다.
 
@@ -249,7 +249,7 @@ R8 (4)  → G27~G30
 |---|---|---|---|
 | **M0** | RED 설계 확정 | Dual-Track 33건 Test ID · AC 매핑 · G1/G2/G3 fixture 정의 | ✅ |
 | **M1** | RED 커밋 | R1~R8 테스트 파일 커밋, 전체 FAILED 확인 | 🔄 R1만 존재 |
-| **M2** | GREEN — FR-01 | G01~G18 통과 (입력 검증 + 격리) | 🔄 G01~G05 완료 |
+| **M2** | GREEN — FR-01 | G01~G18 통과 (입력 검증 + 격리) | 🔄 G01~G09 완료 |
 | **M3** | GREEN — FR-02~04 | G19~G26 통과 (Blank · Missing · Validator) | ⬜ |
 | **M4** | GREEN — FR-05 | G27~G30 통과 (Solver) | ⬜ |
 | **M5** | GREEN — 출력 계약 | G31~G33 통과 (U-OUT) | ⬜ |
@@ -293,8 +293,8 @@ RED 커밋 (R#)  →  pytest FAILED 확인  →  GREEN 1건씩 (G##)  →  pytes
 ### B. GREEN — Phase 1: FR-01 크기·격리 (R1, G01~G09)
 
 - [x] **G01~G05** — `grid is None` → `INVALID_SIZE` / `"Grid must be 4x4."`
-- [ ] **G06~G08** — 4×4 크기 검사 (`[]`, 4×0, 3×4) → `input_validator.py`
-- [ ] **G09** — `cli.solve`: validate 실패 시 `resolve()` 미호출 → `cli.py`
+- [x] **G06~G08** — 4×4 크기 검사 (`[]`, 4×0, 3×4) → `input_validator.py`
+- [x] **G09** — `cli.solve`: validate 실패 시 `resolve()` 미호출 → `cli.py`
 
 ### C. GREEN — Phase 2: FR-01 추가 입력 (R2, G10~G14)
 
@@ -354,13 +354,11 @@ RED 커밋 (R#)  →  pytest FAILED 확인  →  GREEN 1건씩 (G##)  →  pytes
 
 | 우선순위 | 작업 | 명령 / 파일 |
 |---|---|---|
-| **1** | G06~G08 GREEN | `input_validator.py` — 4×4 크기 검사 추가 |
-| **2** | G09 GREEN | `cli.py` — validate 선행, 실패 시 early return |
-| **3** | R1 전체 GREEN 확인 | `pytest tests/boundary/test_ac_fr_01_01_input_size_validation.py -v` |
-| **4** | R2 RED 커밋 | `feature/dual-track-tdd`에서 `test_u_in_04_08_*` 복원·커밋 |
-| **5** | conftest fixture | G0/G1/G2/G3 공유 fixture 작성 (R2·Track B 선행) |
+| **1** | R2 RED 커밋 | `feature/dual-track-tdd`에서 `test_u_in_04_08_*` 복원·커밋 |
+| **2** | G10 GREEN | U-IN-04 blank count → E002 |
+| **3** | conftest fixture | G0/G1/G2/G3 공유 fixture 작성 (R2·Track B 선행) |
 
-**현재 테스트 현황 (R1):** 5 passed · 4 failed (G06~G09 잔여)
+**현재 테스트 현황 (R1):** 9 passed · 0 failed (G01~G09 완료)
 
 ---
 
